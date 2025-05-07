@@ -10,4 +10,4 @@ I know there are ways to connect a UPS to your computer to signal powerloss but 
 * Script should run on any Linux based system but has only been tested on a Ubuntu based distro.
 
 ### Consider Donating:
-[Buy me a coffee][https://www.buymeacoffee.com/gr33nknight]
+[Buy me a coffee](https://www.buymeacoffee.com/gr33nknight)
