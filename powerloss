@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+
+import subprocess
+import time
+import os
+import sys
+
+SHUTDOWN_TIMEOUT = 60
+
+def get_monitor_state():
+    graphicVersion = subprocess.check_output(['echo', '$XDG_SESSION_TYPE'], encoding='utf-8')
+
+    if graphicVersion == 'x11':
+        try:
+            output = subprocess.check_output(['xset', '-q'], encoding='utf-8')
+            for line in output.splitlines():
+                if 'Monitor is' in line:
+                    state = line.strip().split('Monitor is')[-1].strip()
+                    return state  # "On" or "Off"
+        except subprocess.CalledProcessError:
+            print("Error calling xset")
+        return None
+    else:
+        output = subprocess.check_output(['swaymsg'], encoding='utf-8')
+
+        ## Needs work I do not have wayland running yet.
+        return "On"
+
+def shutdown():
+    # print("Shutting down...")
+    # This requires root permissions
+    os.system('sudo systemctl poweroff')
+
+def main():
+    off_since = None
+
+    while True:
+        state = get_monitor_state()
+       # print(f"Monitor state: {state}")
+
+        if state == 'Off':
+            if off_since is None:
+                off_since = time.time()
+            elif time.time() - off_since >= SHUTDOWN_TIMEOUT:
+                shutdown()
+                sys.exit(0)
+        else:
+            off_since = None  # Reset timer when monitor is back on
+
+        time.sleep(10)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,12 @@
+[Unit]
+Description=Monitor Off Shutdown Script
+After=graphical-session.target
+
+[Service]
+ExecStart=sudo /usr/bin/python3 /usr/bin/powerloss
+Restart=always
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/yourusername/.Xauthority
+
+[Install]
+WantedBy=default.target
